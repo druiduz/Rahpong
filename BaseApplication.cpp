@@ -230,7 +230,7 @@ void BaseApplication::initArtoolkit()
 	arInitCparam(&cparam);
 
 	TrackResult res1;
-	if( (res1.id=arLoadPatt("E:/Codage/Cours/Rahpong/data/patt.hiro")) >= 0 )
+	if( (res1.id=arLoadPatt("E:/Codage/Cours/Rahpong/data/patt.hiro")) >= 0)
 	{
 		res1.name = "patt.hiro";
 		res1.pattWidth = 113;
@@ -603,6 +603,7 @@ void BaseApplication::track()
 //-------------------------------------------------------------------------------------
 void BaseApplication::updateTrackedNode(const TrackResult& trackRes , Ogre::SceneNode* node )
 {
+	return;
 	if(!node)
 		return;
 
