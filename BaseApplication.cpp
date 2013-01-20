@@ -230,8 +230,10 @@ void BaseApplication::initArtoolkit()
 	arInitCparam(&cparam);
 
 	TrackResult res1;
+	Ogre::LogManager::getSingletonPtr()->logMessage("HIROOOOOOOOOOOOOOOO???");
 	if( (res1.id=arLoadPatt("E:/Codage/Cours/Rahpong/data/patt.hiro")) >= 0)
 	{
+		Ogre::LogManager::getSingletonPtr()->logMessage("HIROOOOOOOOOOOOOOOO");
 		res1.name = "patt.hiro";
 		res1.pattWidth = 113;
 		trackResults.push_back(res1);
@@ -372,7 +374,7 @@ void BaseApplication::go(void)
 //-------------------------------------------------------------------------------------
 bool BaseApplication::setup(void)
 {
-    mRoot = new Ogre::Root(mPluginsCfg , mCfg);
+    mRoot = new Ogre::Root(mPluginsCfg , mCfg, logCfg);
 
     setupResources();
 
@@ -603,7 +605,6 @@ void BaseApplication::track()
 //-------------------------------------------------------------------------------------
 void BaseApplication::updateTrackedNode(const TrackResult& trackRes , Ogre::SceneNode* node )
 {
-	return;
 	if(!node)
 		return;
 

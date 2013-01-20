@@ -32,8 +32,8 @@ class Rahpong : public BaseApplication {
 		Ogre::SceneNode*	mCubeNode;
 
 		//Pongtab mesh and entity
-		Ogre::SceneNode		*mPongTabNode;
-		Ogre::Entity		*mPongTabEntity;
+		Ogre::SceneNode		*mPaletNode;
+		Ogre::Entity		*mPaletEntity;
 
 		Ogre::Real			mEarthRotationSpeed;
 		Ogre::Real			mCubeRotationSpeed;
