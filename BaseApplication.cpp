@@ -26,7 +26,9 @@ BaseApplication::BaseApplication(void)
 	mRunThread(true),
 	mNewImage(false)
 {
-	
+	pathCfg = "E:/Codage/Cours/Rahpong/data";
+	PathHiro = (char *)"E:/Codage/Cours/Rahpong/data/patt.hiro";
+	PathKanji = (char *)"E:/Codage/Cours/Rahpong/data/patt.kanji";
 	mThread = boost::thread(&BaseApplication::treadCam, this);
 }
 
@@ -146,6 +148,8 @@ bool BaseApplication::configure(void)
     // Show the configuration dialog and initialise the system
     // You can skip this and use root.restoreConfig() to load configuration
     // settings if you were sure there are valid ones saved in ogre.cfg
+
+	//if(mRoot->restoreConfig()) return true;
     if(mRoot->showConfigDialog())
     {
         // If returned true, user clicked OK so initialise
@@ -230,17 +234,15 @@ void BaseApplication::initArtoolkit()
 	arInitCparam(&cparam);
 
 	TrackResult res1;
-	Ogre::LogManager::getSingletonPtr()->logMessage("HIROOOOOOOOOOOOOOOO???");
-	if( (res1.id=arLoadPatt("E:/Codage/Cours/Rahpong/data/patt.hiro")) >= 0)
+	if( (res1.id=arLoadPatt(PathHiro)) >= 0)
 	{
-		Ogre::LogManager::getSingletonPtr()->logMessage("HIROOOOOOOOOOOOOOOO");
 		res1.name = "patt.hiro";
 		res1.pattWidth = 113;
 		trackResults.push_back(res1);
 	}
 
 	TrackResult res2;
-	if( (res2.id=arLoadPatt("E:/Codage/Cours/Rahpong/data/patt.kanji")) >= 0 )
+	if( (res2.id=arLoadPatt(PathKanji)) >= 0 )
 	{
 		res2.name = "patt.kanji";
 		res2.pattWidth = 113;
@@ -355,13 +357,13 @@ void BaseApplication::loadResources(void)
 void BaseApplication::go(void)
 {
 #ifdef _DEBUG
-    mPluginsCfg = "E:/Codage/Cours/Rahpong/data/plugins_d.cfg";
+    mPluginsCfg = pathCfg+"/plugins_d.cfg";
 #else
-    mPluginsCfg = "E:/Codage/Cours/Rahpong/data/plugins.cfg";
+    mPluginsCfg = pathCfg+"/plugins.cfg";
 #endif
-	mResourcesCfg = "E:/Codage/Cours/Rahpong/data/resources.cfg";
-	mCfg = "E:/Codage/Cours/Rahpong/data/ogre.cfg";
-	logCfg = "E:/Codage/Cours/Rahpong/data/RahpongLog.txt";
+	mResourcesCfg = pathCfg+"/resources.cfg";
+	mCfg = pathCfg+"/ogre.cfg";
+	logCfg = pathCfg+"/RahpongLog.txt";
 
     if (!setup())
         return;
