@@ -15,35 +15,33 @@ class Rahpong : public BaseApplication {
 		virtual bool keyReleased( const OIS::KeyEvent& evt );
 		virtual bool keyPressed( const OIS::KeyEvent &arg );
 
-		Ogre::String		pathCfg;
+		//Ogre::String		pathCfg;
+		bool				isBallVisible;
 
-		//Earth tracked node
-		Ogre::SceneNode*	mEarthTrackNode;
+		//Palet tracked node
+		Ogre::SceneNode*	mPongPaletTrackNode1;
+		Ogre::SceneNode*	mPongPaletTrackNode2;
 
-		//Earth base node
-		Ogre::SceneNode*	mEarthBaseNode;
+		//Pong palet base node
+		Ogre::SceneNode*	mPongPaletBaseNode;
 
-		//Earth node and entity
-		Ogre::Entity*		mEarthEntity;             
-		Ogre::SceneNode*	mEarthNode;               
-
-		//First Cube node and entity
-		Ogre::Entity*		mCubeEntity;                 
-		Ogre::SceneNode*	mCubeNode;
+		Ogre::SceneNode		*mBallBaseNode;
 
 		//Pongtab mesh and entity
-		Ogre::SceneNode		*mPaletNode;
-		Ogre::Entity		*mPaletEntity;
+		Ogre::SceneNode		*mBallNode;
+		Ogre::Entity		*mBallEntity;
+		Ogre::SceneNode		*mPaletNode1;
+		Ogre::Entity		*mPaletEntity1;
+		Ogre::SceneNode		*mPaletNode2;
+		Ogre::Entity		*mPaletEntity2;
 
-		Ogre::Real			mEarthRotationSpeed;
-		Ogre::Real			mCubeRotationSpeed;
-	
+		Ogre::Real			mPalet1RotationSpeed;
+		Ogre::Real			mBallRotationSpeed;
 		Ogre::Real			mBaseRotationSpeed;
 
-		//Second cube tracked node
-		Ogre::SceneNode*	mCube2TrackNode;
+		Ogre::Real			ballSpeed;
 
-
+		Ogre::Vector3		positionBall;
 };
 
 #endif
