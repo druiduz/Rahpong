@@ -87,6 +87,8 @@ class BaseApplication :
 		Ogre::String		mCfg;
 		Ogre::String		logCfg;
 		Ogre::String		pathCfg;
+		char*				PathHiro;
+		char*				PathKanji;
 
 		// OgreBites
 		OgreBites::SdkTrayManager*	mTrayMgr;
