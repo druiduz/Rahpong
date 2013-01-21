@@ -30,6 +30,7 @@ BaseApplication::BaseApplication(void)
 	PathHiro = (char *)"E:/Codage/Cours/Rahpong/data/patt.hiro";
 	PathKanji = (char *)"E:/Codage/Cours/Rahpong/data/patt.kanji";
 	mThread = boost::thread(&BaseApplication::treadCam, this);
+	foundSomething = false;
 }
 
 //-------------------------------------------------------------------------------------
@@ -605,7 +606,7 @@ void BaseApplication::track()
 
 
 //-------------------------------------------------------------------------------------
-void BaseApplication::updateTrackedNode(const TrackResult& trackRes , Ogre::SceneNode* node )
+void BaseApplication::updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* node )
 {
 	if(!node)
 		return;

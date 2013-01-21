@@ -14,6 +14,11 @@ class Rahpong : public BaseApplication {
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
 		virtual bool keyReleased( const OIS::KeyEvent& evt );
 		virtual bool keyPressed( const OIS::KeyEvent &arg );
+		void updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* node, int id );
+
+		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBasNode);
+		void switchBaseNodeParent(const int idCurBaseNode);
+		Ogre::Vector3 calculTrajectoire(void);
 
 		//Ogre::String		pathCfg;
 		bool				isBallVisible;
@@ -23,7 +28,8 @@ class Rahpong : public BaseApplication {
 		Ogre::SceneNode*	mPongPaletTrackNode2;
 
 		//Pong palet base node
-		Ogre::SceneNode*	mPongPaletBaseNode;
+		Ogre::SceneNode*	mPongPaletBaseNode1;
+		Ogre::SceneNode*	mPongPaletBaseNode2;
 
 		Ogre::SceneNode		*mBallBaseNode;
 
@@ -42,6 +48,12 @@ class Rahpong : public BaseApplication {
 		Ogre::Real			ballSpeed;
 
 		Ogre::Vector3		positionBall;
+
+		int i;
+		Ogre::Real			deltaX;
+
+		bool*				nodeFound;
+		int					idCurrentPad;
 };
 
 #endif

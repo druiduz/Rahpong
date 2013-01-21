@@ -51,7 +51,7 @@ class BaseApplication :
 
 		//Track patterns in current image
 		void track();
-		void updateTrackedNode(const TrackResult& trackRes , Ogre::SceneNode* node );
+		virtual void updateTrackedNode(const TrackResult& trackRes , Ogre::SceneNode* node );
 
 		void convertArtoolkitTransMat(double patt_trans[3][4] , Ogre::Vector3& pos , Ogre::Quaternion& quat);
 		void normalizeRotationVector(const Ogre::Vector3& rotVect , double& rotNorm , Ogre::Vector3& normalizedVectRot);
@@ -127,6 +127,8 @@ class BaseApplication :
 
 		//Tracking results
 		std::vector<TrackResult> trackResults;
+
+		bool			foundSomething;
 };
 
 #endif 
