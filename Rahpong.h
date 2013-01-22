@@ -16,7 +16,7 @@ class Rahpong : public BaseApplication {
 		virtual bool keyPressed( const OIS::KeyEvent &arg );
 		void updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* node, int id );
 
-		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBasNode);
+		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode);
 		void switchBaseNodeParent(const int idCurBaseNode);
 		Ogre::Vector3 calculTrajectoire(void);
 
@@ -54,6 +54,7 @@ class Rahpong : public BaseApplication {
 
 		bool*				nodeFound;
 		int					idCurrentPad;
+		bool				leftToRight;
 };
 
 #endif

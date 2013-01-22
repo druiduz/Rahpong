@@ -9,7 +9,7 @@ Rahpong::Rahpong(void) :
 	mPongPaletBaseNode1(NULL), mPongPaletBaseNode2(NULL),
 	mBallBaseNode(NULL),
 	mPongPaletTrackNode1(NULL), mPongPaletTrackNode2(NULL),
-	ballSpeed(0.01f), positionBall(0.0f, 20.0f, 0.0f),
+	ballSpeed(0.06f), positionBall(0.0f, 20.0f, 0.0f),
 	idCurrentPad(0)
 {
 	//pathCfg = "E:/Codage/Cours/Rahpong/data";
@@ -19,6 +19,7 @@ Rahpong::Rahpong(void) :
 	nodeFound = (bool*)calloc(2, sizeof(bool));
 	nodeFound[0] = false;
 	nodeFound[1] = false;
+	leftToRight = true;
 }
 
 void Rahpong::createScene(void) {
@@ -135,7 +136,7 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 		mBallNode->setVisible(true);
 		mBallNode->getParent()->removeChild(mBallNode);
 		mPongPaletTrackNode1->addChild(mBallNode);
-		mBallNode->setPosition(0.0f, 0.0f, 0.0f);
+		mBallNode->setPosition(20.0f, 100.0f, 0.0f);
 
 		//Ogre::LogManager::getSingletonPtr()->logMessage("Found[01] - "+Ogre::StringConverter::toString(nodeFound[0]));
 
@@ -143,7 +144,7 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 		mBallNode->setVisible(true);
 		mBallNode->getParent()->removeChild(mBallNode);
 		mPongPaletTrackNode2->addChild(mBallNode);
-		mBallNode->setPosition(0.0f, 0.0f, 0.0f);
+		mBallNode->setPosition(20.0f, 100.0f, 0.0f);
 
 		//Ogre::LogManager::getSingletonPtr()->logMessage("Found[1] - "+Ogre::StringConverter::toString(nodeFound[1]));
 
@@ -153,16 +154,10 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 		mBallNode->setVisible(true);
 		positionBall = mBallNode->getPosition();
 
-		//Ogre::Real deltaX = ballSpeed;
-		//Ogre::Real deltaZ = ballSpeed;
-
-		//positionBall.x += deltaX;
-		//positionBall.z += deltaZ;
-
 		// trajectoire of mBallNode
 		Ogre::Vector3 delta = calculTrajectoire();
 
-		mBallNode->setPosition(positionBall.x+delta.y, positionBall.y+delta.y, positionBall.z);
+		mBallNode->setPosition(positionBall.x+delta.x, positionBall.y+delta.y, positionBall.z+delta.z);
 
 		/*Ogre::LogManager::getSingletonPtr()->logMessage("looooog - (x: "+
 			Ogre::StringConverter::toString(positionBall.x)+", y: "+
@@ -176,10 +171,12 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 			switchBaseNodeParent(idCurrentPad);
 		}
 
-		Ogre::LogManager::getSingletonPtr()->logMessage("BaseNodeParent: "+Ogre::StringConverter::toString(idCurrentPad));
+		//Ogre::LogManager::getSingletonPtr()->logMessage("BaseNodeParent: "+Ogre::StringConverter::toString(idCurrentPad));
 		
 	} else if ( !nodeFound[0] && !nodeFound[1] ){
-		Ogre::LogManager::getSingletonPtr()->logMessage("Found[0] - "+Ogre::StringConverter::toString(nodeFound[0])+ "Found[1] - "+Ogre::StringConverter::toString(nodeFound[1]));
+		/*Ogre::LogManager::getSingletonPtr()->logMessage("Found[0] - "+
+			Ogre::StringConverter::toString(nodeFound[0])+ "Found[1] - "+
+			Ogre::StringConverter::toString(nodeFound[1]));*/
 		mBallNode->setVisible(false);
 	}
 
@@ -223,52 +220,58 @@ void Rahpong::updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* no
 // @param idCurBaseNode: BaseNode parent of node
 bool Rahpong::collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode){
 	Ogre::SceneNode *toColide = NULL;
-	bool leftToRight = true;
+	Ogre::Vector3 ballPos = node->getParent()->getPosition()+node->getPosition();
 
 	if( idCurBaseNode == 0 ) {
 		toColide = mPongPaletBaseNode2;
-		if ( mPongPaletBaseNode1->getPosition().x < mPongPaletBaseNode2->getPosition().x ) {
+		if ( mPongPaletBaseNode1->getPosition().x+D_Pad_BaseNode > mPongPaletBaseNode2->getPosition().x+D_Pad_BaseNode ) {
 			leftToRight = false;
+		} else {
+			leftToRight = true;
 		}
 	} else {
 		toColide = mPongPaletBaseNode1;
-		if ( mPongPaletBaseNode1->getPosition().x > mPongPaletBaseNode2->getPosition().x ) {
+		if ( mPongPaletBaseNode1->getPosition().x+D_Pad_BaseNode < mPongPaletBaseNode2->getPosition().x+D_Pad_BaseNode ) {
+			leftToRight = true;
+		} else {
 			leftToRight = false;
 		}
 	}
 
+	Ogre::LogManager::getSingletonPtr()->logMessage("Direction: "+Ogre::StringConverter::toString(leftToRight));
 
 	//ALGO
-	Ogre::Vector3 ballPos = mBallNode->getPosition();
 	Ogre::Vector3 padPos = toColide->getPosition();
-
+	/*Ogre::LogManager::getSingletonPtr()->logMessage("BallPos.x: "+Ogre::StringConverter::toString(ballPos.x)+
+													", padPos.x: "+Ogre::StringConverter::toString(padPos.x));*/
 	if ( leftToRight ) {
-		if ( ballPos.x >= padPos.x && ballPos.y <= padPos.y+toColide->getScale().y/2 && ballPos.y >= padPos.y-toColide->getScale().y/2) {
+		if ( ballPos.x >= padPos.x+D_Pad_BaseNode /*&& ballPos.z <= padPos.z+toColide->getScale().z/2 && ballPos.z >= padPos.z-toColide->getScale().z/2*/) {
 			return true;
 		}
 
 	} else {
-		if ( ballPos.x <= padPos.x && ballPos.y <= padPos.y+toColide->getScale().y/2 && ballPos.y >= padPos.y-toColide->getScale().y/2) {
+		if ( ballPos.x <= padPos.x-D_Pad_BaseNode /*&& ballPos.z <= padPos.z+toColide->getScale().z/2 && ballPos.z >= padPos.z-toColide->getScale().z/2*/) {
 			return true;
 		}
 	}
 	//
 
-
 	return false;
 }
 
 // switch parent of ballNode with other pad
-void Rahpong::switchBaseNodeParent(const int idCurBasNode){
+void Rahpong::switchBaseNodeParent( const int idCurBaseNode ){
 	mBallNode->getParent()->removeChild(mBallNode);
 	
-	if( idCurBasNode == 0 ) {
+	if( idCurBaseNode == 0 ) {
 		mPongPaletTrackNode2->addChild(mBallNode);
 		idCurrentPad = 1;
 	} else {
 		mPongPaletTrackNode1->addChild(mBallNode);
 		idCurrentPad = 0;
 	}
+	mBallNode->setPosition(0.0f, 0.0f, 0.0f);
+	Ogre::LogManager::getSingletonPtr()->logMessage("Switch parent to "+Ogre::StringConverter::toString(idCurrentPad));
 }
 
 // return a vector which represent the next step to reach other pad
@@ -276,6 +279,18 @@ void Rahpong::switchBaseNodeParent(const int idCurBasNode){
 Ogre::Vector3 Rahpong::calculTrajectoire(void){
 	Ogre::Vector3 traj = Ogre::Vector3();
 
+	Ogre::Real x = 0.0f;
+	Ogre::Real z = 0.0f;
+	
+	//tmp
+	x = ballSpeed;
+	//z = 0.01f;
+
+	if( !leftToRight ) x = -1*x;
+
+	traj.x = x;
+	traj.y = 0.0f;
+	traj.z = z;
 
 	return traj;
 }
