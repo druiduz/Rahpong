@@ -18,10 +18,8 @@ class Rahpong : public BaseApplication {
 
 		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode);
 		void switchBaseNodeParent(const int idCurBaseNode);
-		Ogre::Vector3 calculTrajectoire(void);
+		Ogre::Vector3 nextLocation(void);
 
-		//Ogre::String		pathCfg;
-		bool				isBallVisible;
 
 		//Palet tracked node
 		Ogre::SceneNode*	mPongPaletTrackNode1;
@@ -49,12 +47,10 @@ class Rahpong : public BaseApplication {
 
 		Ogre::Vector3		positionBall;
 
-		int i;
-		Ogre::Real			deltaX;
-
 		bool*				nodeFound;
 		int					idCurrentPad;
 		bool				leftToRight;
+		bool				upToDown;
 };
 
 #endif
