@@ -31,6 +31,7 @@ void Rahpong::createScene(void) {
     mBallNode->attachObject(mBallEntity);
 	mBallNode->pitch(Ogre::Radian(-0.77f));
 
+	// Pas utilisé, prévu pour la suite si on met la balle indépendante des track
 	mBallEntity2 = mSceneMgr->createEntity("Ball2", "palet.mesh");
 	mBallNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BallNode2");
 	mBallNode2->setScale(0.02f, 0.02f, 0.02f);
@@ -128,6 +129,7 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 	//if(mBallNode)
 	//	mBallNode->roll(Ogre::Radian(evt.timeSinceLastFrame * mPalet1RotationSpeed)); 
 
+	// Si un track sur les deux sont déteté, on affiche la balle mais elle ne bouge pas
 	if( nodeFound[0] && !nodeFound[1] ) {
 		mBallNode->setVisible(true);
 		mBallNode->getParent()->removeChild(mBallNode);
@@ -144,21 +146,22 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 
 		//Ogre::LogManager::getSingletonPtr()->logMessage("Found[1] - "+Ogre::StringConverter::toString(nodeFound[1]));
 
-	// if both pads are visible
+	// if both pads are visible,
+	// C'est ici qu'on calcule le step à chaque frame et si y'a colision
 	} else if ( nodeFound[0] && nodeFound[1] ) {
-		mBallNode2->setPosition(mPongPaletTrackNode1->getPosition());
+		//mBallNode2->setPosition(mPongPaletTrackNode1->getPosition());
 		mBallNode->setVisible(true);
 		positionBall = mBallNode->getPosition();
-		positionBall2 = mBallNode2->getPosition();
+		//positionBall2 = mBallNode2->getPosition();
 
 		// trajectoire of mBallNode
 		Ogre::Vector3 delta = nextLocation(mBallNode);
-		Ogre::Vector3 delta2 = nextLocation(mBallNode2);
+		//Ogre::Vector3 delta2 = nextLocation(mBallNode2);
 		//Ogre::LogManager::getSingletonPtr()->logMessage(" - (x: "+
 		//	Ogre::StringConverter::toString(delta2.x));
 
 		mBallNode->setPosition(positionBall.x+delta.x, positionBall.y+delta.y, positionBall.z+delta.z);
-		mBallNode2->setPosition(positionBall2.x+delta2.x, positionBall2.y+delta2.y, positionBall2.z+delta2.z);
+		//mBallNode2->setPosition(positionBall2.x+delta2.x, positionBall2.y+delta2.y, positionBall2.z+delta2.z);
 
 		/*Ogre::LogManager::getSingletonPtr()->logMessage("looooog - (x: "+
 			Ogre::StringConverter::toString(positionBall.x)+", y: "+
@@ -168,10 +171,12 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 		Ogre::LogManager::getSingletonPtr()->logMessage("Found[0] - "+Ogre::StringConverter::toString(nodeFound[0]));
 		*/
 
+		// Si y'a colision, on change de parent
 		if( collisionOtherPad(mBallNode, idCurrentPad) ) {
 			switchBaseNodeParent(idCurrentPad);
 		}
 
+		// Pas utilisé, prévu pour la suite si on met la balle indépendante des track
 		/*if( collisionWithPad(mBallNode2) ) {
 			direction = !direction;
 		}*/
@@ -227,8 +232,10 @@ bool Rahpong::collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode){
 	Ogre::SceneNode *toColide = NULL;
 	Ogre::Vector3 ballPos = node->getParent()->getPosition()+node->getPosition();
 
+	// Si le parent de la balle est le track 1
 	if( idCurBaseNode == 0 ) {
 		toColide = mPongPaletTrackNode2;
+		// Detecte la position des tag l'un par rapport à l'autre pour determiner le sens de déplacement
 		if ( mPongPaletTrackNode1->getPosition().x > mPongPaletTrackNode2->getPosition().x) {
 			leftToRight = false;
 		} else {
@@ -249,6 +256,8 @@ bool Rahpong::collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode){
 	Ogre::Vector3 padPos = toColide->getPosition();
 	Ogre::LogManager::getSingletonPtr()->logMessage("BallPos.x: "+Ogre::StringConverter::toString(ballPos.x)+
 													", padPos.x: "+Ogre::StringConverter::toString(padPos.x)+" --> Direction: "+Ogre::StringConverter::toString(leftToRight));
+
+	// Test la collision
 	if ( leftToRight ) {
 		if ( ballPos.x+30.0f >= padPos.x) {
 			upToDown = 0;
@@ -280,6 +289,7 @@ bool Rahpong::collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode){
 	return false;
 }
 
+// Pas utilisé, prévu pour la suite si on met la balle indépendante des track
 bool Rahpong::collisionWithPad(Ogre::SceneNode *node){
 	Ogre::SceneNode *toColide = NULL;
 	Ogre::Vector3 posTrack1 = mPongPaletTrackNode1->getPosition();
@@ -336,6 +346,7 @@ bool Rahpong::collisionWithPad(Ogre::SceneNode *node){
 void Rahpong::switchBaseNodeParent( const int idCurBaseNode ){
 	mBallNode->getParent()->removeChild(mBallNode);
 	
+	// On change le parent
 	if( idCurBaseNode == 0 ) {
 		mPongPaletTrackNode2->addChild(mBallNode);
 		idCurrentPad = 1;
@@ -343,6 +354,7 @@ void Rahpong::switchBaseNodeParent( const int idCurBaseNode ){
 		mPongPaletTrackNode1->addChild(mBallNode);
 		idCurrentPad = 0;
 	}
+	// On place la balle un peu sur le coté (mais semble pas fonctionné )
 	if( leftToRight ) {
 		mBallNode->setPosition(-40.0f, 0.0f, 0.0f);
 	} else {
