@@ -17,8 +17,9 @@ class Rahpong : public BaseApplication {
 		void updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* node, int id );
 
 		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode);
+		bool collisionWithPad(Ogre::SceneNode *node);
 		void switchBaseNodeParent(const int idCurBaseNode);
-		Ogre::Vector3 nextLocation(void);
+		Ogre::Vector3 nextLocation(Ogre::SceneNode *node);
 
 
 		//Palet tracked node
@@ -34,6 +35,8 @@ class Rahpong : public BaseApplication {
 		//Pongtab mesh and entity
 		Ogre::SceneNode		*mBallNode;
 		Ogre::Entity		*mBallEntity;
+		Ogre::SceneNode		*mBallNode2;
+		Ogre::Entity		*mBallEntity2;
 		Ogre::SceneNode		*mPaletNode1;
 		Ogre::Entity		*mPaletEntity1;
 		Ogre::SceneNode		*mPaletNode2;
@@ -43,14 +46,17 @@ class Rahpong : public BaseApplication {
 		Ogre::Real			mBallRotationSpeed;
 		Ogre::Real			mBaseRotationSpeed;
 
-		Ogre::Real			ballSpeed;
+		Ogre::Real			ballSpeedX;
+		Ogre::Real			ballSpeedZ;
 
 		Ogre::Vector3		positionBall;
+		Ogre::Vector3		positionBall2;
 
 		bool*				nodeFound;
 		int					idCurrentPad;
 		bool				leftToRight;
-		bool				upToDown;
+		int					upToDown;
+		bool				direction;
 };
 
 #endif
