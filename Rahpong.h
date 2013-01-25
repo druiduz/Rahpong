@@ -16,9 +16,8 @@ class Rahpong : public BaseApplication {
 		virtual bool keyPressed( const OIS::KeyEvent &arg );
 		void updateTrackedNode(const TrackResult& trackRes, Ogre::SceneNode* node, int id );
 
-		bool collisionOtherPad(Ogre::SceneNode *node, const int idCurBaseNode);
+		bool checkDirection(void);
 		bool collisionWithPad(Ogre::SceneNode *node);
-		void switchBaseNodeParent(const int idCurBaseNode);
 		Ogre::Vector3 nextLocation(Ogre::SceneNode *node);
 
 
@@ -27,20 +26,19 @@ class Rahpong : public BaseApplication {
 		Ogre::SceneNode*	mPongPaletTrackNode2;
 
 		//Pong palet base node
-		Ogre::SceneNode*	mPongPaletBaseNode1;
-		Ogre::SceneNode*	mPongPaletBaseNode2;
+		Ogre::SceneNode		*mPongBaseNode;
 
 		Ogre::SceneNode		*mBallBaseNode;
 
 		//Pongtab mesh and entity
 		Ogre::SceneNode		*mBallNode;
 		Ogre::Entity		*mBallEntity;
-		Ogre::SceneNode		*mBallNode2;
-		Ogre::Entity		*mBallEntity2;
 		Ogre::SceneNode		*mPaletNode1;
 		Ogre::Entity		*mPaletEntity1;
 		Ogre::SceneNode		*mPaletNode2;
 		Ogre::Entity		*mPaletEntity2;
+
+		Ogre::SceneNode		*padToColide;
 
 		Ogre::Real			mPalet1RotationSpeed;
 		Ogre::Real			mBallRotationSpeed;
@@ -50,13 +48,13 @@ class Rahpong : public BaseApplication {
 		Ogre::Real			ballSpeedZ;
 
 		Ogre::Vector3		positionBall;
-		Ogre::Vector3		positionBall2;
 
 		bool*				nodeFound;
-		int					idCurrentPad;
-		bool				leftToRight;
 		int					upToDown;
 		bool				direction;
+		bool				firstAllFound;
+
+		float				heightPad;
 };
 
 #endif

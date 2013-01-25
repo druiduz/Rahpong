@@ -1,4 +1,4 @@
 
 Debug/*
-bin/*
+build/vc10/bin/*
 *.zip
