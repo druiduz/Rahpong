@@ -30,7 +30,6 @@ BaseApplication::BaseApplication(void)
 	PathHiro = (char *)"E:/Codage/Cours/Rahpong/data/patt.hiro";
 	PathKanji = (char *)"E:/Codage/Cours/Rahpong/data/patt.kanji";
 	mThread = boost::thread(&BaseApplication::treadCam, this);
-	foundSomething = false;
 }
 
 //-------------------------------------------------------------------------------------

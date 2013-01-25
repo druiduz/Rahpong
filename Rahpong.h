@@ -40,18 +40,14 @@ class Rahpong : public BaseApplication {
 
 		Ogre::SceneNode		*padToColide;
 
-		Ogre::Real			mPalet1RotationSpeed;
-		Ogre::Real			mBallRotationSpeed;
-		Ogre::Real			mBaseRotationSpeed;
-
 		Ogre::Real			ballSpeedX;
 		Ogre::Real			ballSpeedZ;
 
 		Ogre::Vector3		positionBall;
 
 		bool*				nodeFound;
-		int					upToDown;
-		bool				direction;
+		int					upToDown; //0: horizontale, 1: downToUp, -1: upToDown
+		bool				direction; // true: left to right
 		bool				firstAllFound;
 
 		float				heightPad;

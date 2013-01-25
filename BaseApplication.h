@@ -128,7 +128,6 @@ class BaseApplication :
 		//Tracking results
 		std::vector<TrackResult> trackResults;
 
-		bool			foundSomething;
 };
 
 #endif 

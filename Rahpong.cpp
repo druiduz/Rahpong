@@ -2,7 +2,6 @@
 #include "Rahpong.h"
 
 Rahpong::Rahpong(void) :
-	mBaseRotationSpeed(0.2f), mPalet1RotationSpeed(0.1f), mBallRotationSpeed(NULL),
 	mBallNode(NULL), mBallEntity(NULL),
 	mPaletEntity1(NULL), mPaletNode1(NULL), 
 	mPaletEntity2(NULL), mPaletNode2(NULL),
@@ -11,7 +10,6 @@ Rahpong::Rahpong(void) :
 	ballSpeedX(0.15f), ballSpeedZ(0.03f), positionBall(0.0f, 20.0f, 0.0f),
 	padToColide(NULL)
 {
-	//pathCfg = "E:/Codage/Cours/Rahpong/data";
 	nodeFound = (bool*)calloc(2, sizeof(bool));
 	nodeFound[0] = false;
 	nodeFound[1] = false;
@@ -25,8 +23,7 @@ void Rahpong::createScene(void) {
 
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
 
-	// Pas utilisé, prévu pour la suite si on met la balle indépendante des track
-	mBallEntity = mSceneMgr->createEntity("Ball", "palet.mesh");
+	mBallEntity = mSceneMgr->createEntity("Ball", "sphere.mesh");
 	mBallNode = mSceneMgr->createSceneNode("BallNode2");
 	mBallNode->setScale(0.02f, 0.02f, 0.02f);
     mBallNode->attachObject(mBallEntity);
@@ -50,7 +47,6 @@ void Rahpong::createScene(void) {
     mPaletNode2->attachObject(mPaletEntity2);
 
 	mPongPaletTrackNode2 = mSceneMgr->createSceneNode("PaletTrackNode2");
-	mPongPaletTrackNode2->setDebugDisplayEnabled(true);
 	mPongPaletTrackNode2->addChild(mPaletNode2);
 	mPaletNode2->setPosition(0.0f, 45.0f, 0.0f);
 
@@ -96,13 +92,6 @@ bool Rahpong::keyReleased( const OIS::KeyEvent& evt ) {
 	case OIS::KC_S : 
         ballSpeedX += 0.01f;
         break;
-/*
-	case OIS::KC_Z : 
-        mBaseRotationSpeed -= 0.1f;
-        break;
-	case OIS::KC_X : 
-        mBaseRotationSpeed += 0.1f;
-        break;*/
     default:
         break;
     }
@@ -120,8 +109,6 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 	//Manage tracking results	
 	updateTrackedNode(trackResults[0] , mPongPaletTrackNode1, 0);
 	updateTrackedNode(trackResults[1] , mPongPaletTrackNode2, 1);
-
-	mPaletNode1->roll(Ogre::Radian(evt.timeSinceLastFrame * mPalet1RotationSpeed));
 
 	// Si un track sur les deux sont déteté, on affiche la balle mais elle ne bouge pas
 	if( nodeFound[0] && !nodeFound[1] ) {
@@ -154,18 +141,10 @@ bool Rahpong::frameRenderingQueued(const Ogre::FrameEvent &evt) {
 
 		//direction = checkDirection();
 
-		// trajectoire of mBallNode
+		// trajectoir of mBallNode
 		Ogre::Vector3 delta = nextLocation(mBallNode);
 
 		mBallNode->setPosition(positionBall.x+delta.x, positionBall.y+delta.y, positionBall.z+delta.z);
-
-		/*Ogre::LogManager::getSingletonPtr()->logMessage("- (x: "+
-			Ogre::StringConverter::toString(positionBall.x)+", y: "+
-			Ogre::StringConverter::toString(positionBall.y)+", z: "+
-			Ogre::StringConverter::toString(positionBall.z)+")");
-
-		Ogre::LogManager::getSingletonPtr()->logMessage("Found[0] - "+Ogre::StringConverter::toString(nodeFound[0]));
-		*/
 
 		if( collisionWithPad(mBallNode) ) {
 			direction = !direction;
@@ -216,6 +195,7 @@ bool Rahpong::checkDirection(){
 	return mPongPaletTrackNode1->getPosition().x < mPongPaletTrackNode2->getPosition().x;
 }
 
+// Check colision with padToColide on axe x and z
 bool Rahpong::collisionWithPad(Ogre::SceneNode *node){
 
 	Ogre::Vector3 ballPos = node->getPosition();
