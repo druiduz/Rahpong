@@ -26,6 +26,4 @@
 #include <AR/param.h>
 #include <AR/ar.h>
 
-#define D_Pad_BaseNode 50.0f
-
 #endif
